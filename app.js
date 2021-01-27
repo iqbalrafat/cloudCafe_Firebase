@@ -15,11 +15,21 @@ function renderCafe(doc){
   li.appendChild(city);
   //assign the child to ul.
   cafeList.appendChild(li);
-
 }
 //getting Data from DB
 db.collection('cafes').get().then((snapshot)=>{
   snapshot.docs.forEach(doc=> {
     renderCafe(doc);    
   })
+})
+//saving Data
+form.addEventListener('submit',(e)=>{
+  e.preventDefault();
+  db.collection('cafes').add({
+    name:form.name.value,
+    city:form.city.value
+  });
+  form.name.value="";
+  form.name.value="";
+
 })
