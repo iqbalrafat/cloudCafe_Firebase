@@ -1,4 +1,5 @@
 const cafeList = document.querySelector('#cafe-list');
+const form =document.querySelector('#add-cafe-form');
 //create list element and render data
 function renderCafe(doc){
   let li = document.createElement('li');
@@ -12,13 +13,11 @@ function renderCafe(doc){
   //assign value to li tag
   li.appendChild(name);
   li.appendChild(city);
-  
-
-//assign the child to ul.
-cafeList.appendChild(li);
+  //assign the child to ul.
+  cafeList.appendChild(li);
 
 }
-
+//getting Data from DB
 db.collection('cafes').get().then((snapshot)=>{
   snapshot.docs.forEach(doc=> {
     renderCafe(doc);    
