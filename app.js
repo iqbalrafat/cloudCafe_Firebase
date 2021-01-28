@@ -31,13 +31,16 @@ function renderCafe(doc){
       db.collection('cafes').doc(id).delete();
   })
 }
-//getting All Data from DB
-  db.collection('cafes').get().then((snapshot)=>{
+//getting All Data from DB. Orderby() method allow to display data in specific order. 
+//In firebase upper case come first. Also firebase require indexing that can be done any time.
+//orderby() method can be combine with other method like where(0.)
+  db.collection('cafes').orderBy('name').get().then((snapshot)=>{
     snapshot.docs.forEach(doc=> {
     renderCafe(doc);    
     })
   })
   //getting single data from DB
+  //to get single field we use the where option that has three parameter, field, condition and field value
   // db.collection('cafes').where('city','==','Edmonton').get().then((snapshot)=>{
   //   snapshot.docs.forEach(doc=>{
   //     renderCafe(doc);
