@@ -23,20 +23,26 @@ function renderCafe(doc){
     //Delete Data
     // To delete data we will add a cross symbol in li tag then add event listener that
     //will take the individual id of the cafe and delete it.
-    cross.addEventListener('click',(e)=>{
+  cross.addEventListener('click',(e)=>{
       e.stopPropagation();
       //do console.log(e).event object has an object that has object parentElement that contain property attributes.
       //get Attribute() method take the value of that property in our case data-id.
       let id=e.target.parentElement.getAttribute('data-id'); 
       db.collection('cafes').doc(id).delete();
-    })
+  })
 }
-//getting Data from DB
-    db.collection('cafes').get().then((snapshot)=>{
+//getting All Data from DB
+  db.collection('cafes').get().then((snapshot)=>{
     snapshot.docs.forEach(doc=> {
     renderCafe(doc);    
+    })
   })
-})
+  //getting single data from DB
+  // db.collection('cafes').where('city','==','Edmonton').get().then((snapshot)=>{
+  //   snapshot.docs.forEach(doc=>{
+  //     renderCafe(doc);
+  //   })
+  // })
 //saving Data
 form.addEventListener('submit',(e)=>{
   e.preventDefault();
