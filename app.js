@@ -31,16 +31,25 @@ function renderCafe(doc){
       db.collection('cafes').doc(id).delete();
   })
 }
-//getting All Data from DB. Orderby() method allow to display data in specific order. 
-//In firebase upper case come first. Also firebase require indexing that can be done any time.
-//orderby() method can be combine with other method like where(0.)
-  db.collection('cafes').orderBy('name').get().then((snapshot)=>{
-    snapshot.docs.forEach(doc=> {
-    renderCafe(doc);    
-    })
-  })
+//getting All Data from DB, no update on front end.
+
+  // db.collection('cafes').get().then((snapshot)=>{
+  //   snapshot.docs.forEach(doc=> {
+  //   renderCafe(doc);    
+  //   })
+  // })
+
+// Orderby() method allow to display data in specific order.In firebase upper case come first. Also firebase require indexing that can be done any time.
+//orderby() method can be combine with other method like where()
+
+  // db.collection('cafes').orderBy('name').get().then((snapshot)=>{
+  //   snapshot.docs.forEach(doc=> {
+  //   renderCafe(doc);    
+  //   })
+  // })
+
   //getting single data from DB
-  //to get single field we use the where option that has three parameter, field, condition and field value
+  //where() method allow to retrieve selected field from DB. It has three parameter, field, condition and field value
   // db.collection('cafes').where('city','==','Edmonton').get().then((snapshot)=>{
   //   snapshot.docs.forEach(doc=>{
   //     renderCafe(doc);
@@ -48,12 +57,26 @@ function renderCafe(doc){
   // })
 //saving Data
 form.addEventListener('submit',(e)=>{
-  e.preventDefault();
-  db.collection('cafes').add({
-    name:form.name.value,
-    city:form.city.value
+    e.preventDefault();
+    db.collection('cafes').add({
+      name:form.name.value,
+      city:form.city.value
+    });
+    form.name.value="";
+    form.name.value="";
+  })
+  //Real time Listener. onSnapshot() method gives the real-time listener functionality 
+  //and docChanges() method check any change in documents and save in type paramter.
+  db.collection('cafes').onSnapshot(snapshot=>{
+    let changes=snapshot.docChanges();
+    changes.forEach(change=>{
+      if (change.type=='added'){
+          renderCafe(change.doc);
+        }
+        else if(change.type=='removed'){
+          let li = cafeList.querySelector('[data-id=' + change.doc.id + ']');
+          cafeList.removeChild(li);
+        }     
   });
-  form.name.value="";
-  form.name.value="";
-
 })
+
